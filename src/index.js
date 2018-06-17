@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
@@ -14,9 +13,11 @@ function Square(props) {
 class Board extends React.Component {
   renderSquare(i) {
     return (
-      <Square value={this.props.squares[i]}
-            onClick={() => this.props.onClick(i)} />
-          );
+      <Square
+        value={this.props.squares[i]}
+        onClick={() => this.props.onClick(i)}
+      />
+    );
   }
 
   render() {
@@ -88,7 +89,7 @@ class Game extends React.Component {
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {
-      const desc = move ? `Go to move #${move}` : 'Go to game start';
+      const desc = move ? `${getOrdinal(move)} move` : 'Game Start';
       return (
         <span key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
@@ -105,6 +106,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <div>Go To:</div>
           <div>{moves}</div>
         </div>
       </div>
@@ -134,6 +136,15 @@ function calculateWinner(squares) {
   // If there are no winning lines...
   return null;
 }
+
+// ========================================
+// Helpers
+
+function getOrdinal(num) {
+  var s = ['th','st','nd','rd'],
+  v = num % 100;
+  return num + (s[(v - 20) % 10] || s[v] || s[0]);
+ }
 
 // ========================================
 
