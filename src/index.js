@@ -12,44 +12,16 @@ function Square(props) {
 }
 
 class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      history: [{
-        squares: Array(9).fill(null),
-      }],
-      xIsNext: true,
-    }
-  }
-
   renderSquare(i) {
     return (
-      <Square value={this.state.squares[i]}
-            onClick={() => this.handleClick(i)} />
+      <Square value={this.props.squares[i]}
+            onClick={() => this.props.onClick(i)} />
           );
   }
 
-  handleClick(i) {
-    // call .slice() to copy the squares array instead of mutating the existing array
-    const squares = this.state.squares.slice();
-    // Don't do anything if there is already a winner or the square has a value aleady
-    if (calculateWinner(squares) || squares[i]) { return; }
-    // Set value within squares Array
-    squares[i] = this.setSquareValue();
-    this.setState({squares: squares, xIsNext: !this.state.xIsNext});
-  }
-
-  setSquareValue() {
-    return this.state.xIsNext ? 'X' : 'O';
-  }
-
   render() {
-    const winner = calculateWinner(this.state.squares);
-    let status = winner ? `Winner: ${winner}` : `Next Player: ${this.setSquareValue()}`;
-
     return (
       <div>
-        <div className="status">{status}</div>
         <div className="board-row">
           {this.renderSquare(0)}
           {this.renderSquare(1)}
@@ -71,15 +43,69 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      history: [{
+        squares: Array(9).fill(null),
+      }],
+      stepNumber: 0,
+      xIsNext: true,
+    };
+  }
+
+  handleClick(i) {
+    // Get the game history...
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);
+    // Get the last entry....
+    const current = history[history.length - 1];
+    // call .slice() to copy the squares array instead of mutating the existing array
+    const squares = current.squares.slice();
+    // Don't do anything if there is already a winner or the square has a value aleady
+    if (calculateWinner(squares) || squares[i]) { return; }
+    // Set value within squares Array
+    squares[i] = this.setSquareValue();
+    this.setState({
+      history: history.concat([{
+        squares: squares,
+      }]),
+      stepNumber: history.length,
+      xIsNext: !this.state.xIsNext
+    });
+  }
+
+  setSquareValue() {
+    return this.state.xIsNext ? 'X' : 'O';
+  }
+
+  jumpTo(step) {
+    this.setState({ stepNumber: step, xIsNext: (step % 2) === 0 });
+  }
+
   render() {
+    const history = this.state.history;
+    const current = history[this.state.stepNumber];
+    const winner = calculateWinner(current.squares);
+
+    const moves = history.map((step, move) => {
+      const desc = move ? `Go to move #${move}` : 'Go to game start';
+      return (
+        <span key={move}>
+          <button onClick={() => this.jumpTo(move)}>{desc}</button>
+        </span>
+      );
+    })
+
+    let status = winner ? `Winner: ${winner}` : `Next Player: ${this.setSquareValue()}`;
+
     return (
       <div className="game">
         <div className="game-board">
-          <Board />
+          <Board squares={current.squares} onClick={(i) => this.handleClick(i)}/>
         </div>
         <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
+          <div>{status}</div>
+          <div>{moves}</div>
         </div>
       </div>
     );
