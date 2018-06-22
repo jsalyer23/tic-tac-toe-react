@@ -39,8 +39,35 @@ body {
 .game {
   display: flex;
   flex-direction: row;
+
+  .game-board {
+    // TODO
+  }
+
+  .game-info {
+    margin-left: 20px;
+
+    div {
+      font-size: 20px;
+
+      &.has-winner {
+        font-size: 50px;
+        font-weight: bold;
+      }
+    }
+
+    .moves {
+      display: flex;
+      flex-flow: row wrap;
+      width: 80%;
+
+      span {
+        flex: auto;
+      }
+    }
+  }
 }
 
-.game-info {
-  margin-left: 20px;
+.hidden {
+  display: none;
 }

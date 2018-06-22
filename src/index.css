@@ -33,6 +33,19 @@ body {
 .game {
   display: flex;
   flex-direction: row; }
+  .game .game-info {
+    margin-left: 20px; }
+    .game .game-info div {
+      font-size: 20px; }
+      .game .game-info div.has-winner {
+        font-size: 50px;
+        font-weight: bold; }
+    .game .game-info .moves {
+      display: flex;
+      flex-flow: row wrap;
+      width: 80%; }
+      .game .game-info .moves span {
+        flex: auto; }
 
-.game-info {
-  margin-left: 20px; }
+.hidden {
+  display: none; }
