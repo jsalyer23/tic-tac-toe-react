@@ -14,7 +14,10 @@ export default class Game extends React.Component {
       xIsNext: true,
     };
   }
-
+  /**
+   * Adds player move if no one has already won and changes current player, updates Game state
+   * @param  {Number} i Position and identifier for currently clicked square
+   */
   handleClick(i) {
     // Get the game history...
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -35,14 +38,25 @@ export default class Game extends React.Component {
     });
   }
 
+  /**
+   * Sets letter to display depending on who's turn it is
+   * @return {String} 'X' or 'O'
+   */
   setSquareValue() {
     return this.state.xIsNext ? 'X' : 'O';
   }
 
+  /**
+   * Determines if there are any moves to display based on the move history
+   * @return {Boolean}
+   */
   hasMoves() {
     return (this.state.history.length > 1);
   }
-
+  /**
+   * Rewinds or fast forwards through the game's history of moves via component state
+   * @param  {Number} step JSX key from the game's history list
+   */
   jumpTo(step) {
     this.setState({ stepNumber: step, xIsNext: (step % 2) === 0 });
   }
@@ -79,7 +93,11 @@ export default class Game extends React.Component {
     );
   }
 }
-
+/**
+ * Determines if someone has won the game based on current moves
+ * @param  {Array} squares Current board state based on all player moves
+ * @return {String | Null}  If there is a winner, returns winner's marker otherwise returns null
+ */
 function calculateWinner(squares) {
   const winningLines = [
     [0, 1, 2], // Top Horz
