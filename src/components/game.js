@@ -55,7 +55,7 @@ export default class Game extends React.Component {
     const moves = history.map((step, move) => {
       const desc = move ? `${getOrdinal(move)} move` : 'Game Start';
       return (
-        <span className={!moves ? 'hidden' : null} key={move}>
+        <span className={!moves && 'hidden'} key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
         </span>
       );
@@ -69,9 +69,9 @@ export default class Game extends React.Component {
           <Board squares={current.squares} onClick={(i) => this.handleClick(i)}/>
         </div>
         <div className="game-info">
-          <div className={status.charAt(0) === 'W' ? 'has-winner' : null}>{status}</div>
+          <div className={status.charAt(0) === 'W' && 'has-winner'}>{status}</div>
           <div className="moves">
-            <div className={this.hasMoves() ? null : 'hidden'}>Go To:</div>
+            <div className={!this.hasMoves() && 'hidden'}>Go To:</div>
             {moves}
           </div>
         </div>
