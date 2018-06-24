@@ -3,6 +3,11 @@ import Square from '../index.js';
 import '../index.css';
 
 export default class Board extends React.Component {
+  /**
+   * Renders a single Square component to build the game board
+   * @param  {Number} i Square position on the board and unique identifier
+   * @return {Square} JSX Square Component
+   */
   renderSquare(i) {
     return (
       <Square
